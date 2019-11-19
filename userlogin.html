@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <title>User Create</title>
+    <link href='https://fonts.googleapis.com/css?family=Londrina Sketch' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Londrina Outline' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Londrina Shadow' rel='stylesheet'>
+    <script src="https://kit.fontawesome.com/9cdc1b2a92.js" crossorigin="anonymous"></script>
+    <link href="taskplanner.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="overskrift">
+        <p> Logg inn på Note it</p>
+    </div>
+
+   <div class="containerLogin">        
+            <label for="uname"><b>Username</b></label>
+            <input type="text" id="inpEmail" placeholder="E-mail" name="uname">
+
+            <label for="psw"><b>Passord</b></label>
+            <input type="password" id="inpPasswrd" placeholder="Passord" name="psw">
+
+            <br></br>
+            <button id="btnLogin">Logg inn</button>
+
+            <a href="usercreate.html"><b>Ikke en bruker enda? Opprett ny her!</b></a>
+    
+
+            <h3 id="txtResult"></h3>
+        </div>
+        
+</body>
+
+<script>
+
+    let inpEmail = document.getElementById('inpEmail');
+    let inpPasswrd = document.getElementById('inpPasswrd');
+    let btnLogin = document.getElementById('btnLogin');
+    let txtResult = document.getElementById('txtResult');
+
+   
+
+    btnLogin.addEventListener('click', async function(evt) {
+        
+
+    let url = "http://localhost:3000/users/auth";
+
+    let updata = {
+        email: inpEmail.value,
+        passwrd: inpPasswrd.value    
+    }
+
+    let cfg = {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify(updata)
+    }
+
+
+    try {
+        var resp = await fetch(url, cfg);
+        var data = await resp.json();
+        
+        if (resp.status > 202) {
+            throw(data);
+        };
+        txtResult.innerHTML = data.email + " logg in suksess!";
+        sessionStorage.setItem("logindata", JSON.stringify(data));
+        location.href = "home.html";
+    }
+    catch (err) {
+        console.log(err);
+    }
+    
+   
+});
+
+
+</script>
+
+</html>
+
