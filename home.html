@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/9cdc1b2a92.js" crossorigin="anonymous"></script>
+    <link href="taskplanner.css" rel="stylesheet">
+    <title>Home</title>
+</head>
+
+<body>
+
+
+    <div class="overskrift">
+       <p> Velkommen til Note it </p>
+    </div>
+    
+    <a href="plannercreate.html"><button>Lag ny liste</button></a>
+    <br></br>
+    <a href="plannerlist.html"><button>Mine lister</button></a>
+
+    <button id="btnLogout">Logg ut</button>
+    <button id="btnDelete">Delete User</button>
+    
+</body>
+
+<script>
+
+    let btnLogout = document.getElementById("btnLogout");
+    btnLogout.addEventListener("click", function() {
+        sessionStorage.clear();
+        location.href = 'index.html';
+    });
+
+    let btnDelete = document.getElementById("btnDelete");
+    btnDelete.addEventListener("click", function() {
+        deleteUsers()
+    });
+        
+
+//---------------
+    
+async function deleteUsers() {
+
+let url = "http://localhost:3000/users/remove";
+
+let logindata = JSON.parse(sessionStorage.getItem("logindata"));
+let token = logindata.token;
+
+let cfg = {
+    method: "DELETE",
+    headers: {
+        "authorization": token,
+        "Content-Type": "application/json"
+    }
+}
+
+try {
+    let resp = await fetch(url, cfg);
+    let data = resp.json();
+    
+    if (resp.status > 202) {
+        throw (data);
+    };
+
+    //sessionStorage.clear();
+    
+    location.href = 'logoutsite.html';
+    
+}
+  
+catch (err) {
+    console.log(err);
+}
+}
+
+        </script>
+
+</html>

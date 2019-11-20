@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <title>PlannerCreate</title>
+    <script src="https://kit.fontawesome.com/9cdc1b2a92.js" crossorigin="anonymous"></script>
+    <link href="taskplanner.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Lag ny liste</h1>
+        <input type="text" id="inpDest" placeholder="Tittel på liste" required>
+        <input type="date" id="inpDate">
+        <br></br>
+        <button id="btnCreate">Lag liste</button>
+    </div>
+</body>
+
+<script>
+
+    let inpDest = document.getElementById('inpDest');
+    let inpDate = document.getElementById('inpDate');
+    let btnCreate = document.getElementById('btnCreate');
+
+    btnCreate.addEventListener('click', async function(evt) {
+
+    let url = "http://localhost:3000/planner";
+
+    let logindata = JSON.parse(sessionStorage.getItem("logindata"));
+    let token = logindata.token;
+
+    let updata = {
+        dest: inpDest.value,
+        date: inpDate.value,
+        userid: logindata.userid
+        
+    }
+
+    let cfg = {
+        method: "POST",
+        headers: {
+            "authorization": token,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(updata)
+    }
+
+
+    try {
+        var resp = await fetch(url, cfg);
+        var data = await resp.json();
+
+        if (resp.status > 202) {
+            throw(data);
+        };
+        
+        window.location.href = "plannerlist.html";
+
+    }
+    catch (err) {
+        console.log(err);
+    }
+});
+
+</script>
+
+</html>
+
